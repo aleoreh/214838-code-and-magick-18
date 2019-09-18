@@ -55,8 +55,8 @@ var EYE_COLORS = [
 
 // -------- UTILITIES --------
 
-var seedToInt = function (seed, length) {
-  return Math.floor(seed * length);
+var randomToInt = function (rand, length) {
+  return Math.floor(rand * length);
 };
 
 // -------- CONSTRUCTORS --------
@@ -64,18 +64,18 @@ var seedToInt = function (seed, length) {
 /**
  * Generates Wizard dependong on random seeds
  *
- * @param {number} seed1 - float number from 0 to 1
- * @param {number} seed2 - the same
- * @param {number} seed3 - the same
- * @param {number} seed4 - the same
+ * @param {number} rand1 - float number from 0 to 1
+ * @param {number} rand2 - the same
+ * @param {number} rand3 - the same
+ * @param {number} rand4 - the same
  *
  * @return {Wizard} Wizard object
  */
-var initWizard = function (seed1, seed2, seed3, seed4) {
-  var nameIndex = seedToInt(seed1, NAMES.length);
-  var familyNameIndex = seedToInt(seed2, FAMILY_NAMES.length);
-  var coatColorIndex = seedToInt(seed3, COAT_COLORS.length);
-  var eyesColorIndex = seedToInt(seed4, EYE_COLORS.length);
+var initWizard = function (rand1, rand2, rand3, rand4) {
+  var nameIndex = randomToInt(rand1, NAMES.length);
+  var familyNameIndex = randomToInt(rand2, FAMILY_NAMES.length);
+  var coatColorIndex = randomToInt(rand3, COAT_COLORS.length);
+  var eyesColorIndex = randomToInt(rand4, EYE_COLORS.length);
 
   return {
     name: NAMES[nameIndex] + ' ' + FAMILY_NAMES[familyNameIndex],
