@@ -1,15 +1,5 @@
 'use strict';
 
-// -------- DOM ELEMENTS --------
-
-var setup = document.querySelector('.setup');
-
-var similarWizardTemplate = document.querySelector('#similar-wizard-template').content.querySelector('.setup-similar-item');
-
-var setupSimilarList = document.querySelector('.setup-similar-list');
-
-var setupSimilar = document.querySelector('.setup-similar');
-
 // -------- CONSTANTS --------
 
 var WIZARD_COUNT = 4;
@@ -53,29 +43,36 @@ var EYE_COLORS = [
   'green'
 ];
 
+// -------- DOM ELEMENTS --------
+
+var setupElement = document.querySelector('.setup');
+
+var similarWizardTemplate = document.querySelector('#similar-wizard-template').content.querySelector('.setup-similar-item');
+
+var setupSimilarListElement = document.querySelector('.setup-similar-list');
+
+var setupSimilarElement = document.querySelector('.setup-similar');
+
 // -------- UTILITIES --------
 
-var randomToInt = function (rand, length) {
-  return Math.floor(rand * length);
+/**
+ * Generates random int number from 0 to maxBound
+ *
+ * @param {number} maxBound maximal int number to generate
+ *
+ * @return {number} random int number from 0 to maxBound
+ */
+var randomInt = function (maxBound) {
+  return Math.floor(Math.random() * maxBound);
 };
 
-// -------- CONSTRUCTORS --------
+// -------- GENERATORS --------
 
-/**
- * Generates Wizard dependong on random seeds
- *
- * @param {number} rand1 - float number from 0 to 1
- * @param {number} rand2 - the same
- * @param {number} rand3 - the same
- * @param {number} rand4 - the same
- *
- * @return {Wizard} Wizard object
- */
-var initWizard = function (rand1, rand2, rand3, rand4) {
-  var nameIndex = randomToInt(rand1, NAMES.length);
-  var familyNameIndex = randomToInt(rand2, FAMILY_NAMES.length);
-  var coatColorIndex = randomToInt(rand3, COAT_COLORS.length);
-  var eyesColorIndex = randomToInt(rand4, EYE_COLORS.length);
+var generateWizard = function () {
+  var nameIndex = randomInt(NAMES.length);
+  var familyNameIndex = randomInt(FAMILY_NAMES.length);
+  var coatColorIndex = randomInt(COAT_COLORS.length);
+  var eyesColorIndex = randomInt(EYE_COLORS.length);
 
   return {
     name: NAMES[nameIndex] + ' ' + FAMILY_NAMES[familyNameIndex],
@@ -84,11 +81,11 @@ var initWizard = function (rand1, rand2, rand3, rand4) {
   };
 };
 
-var initWizards = function (count) {
+var generateWizards = function (count) {
   var res = [];
 
-  for (var i = 1; i <= count; i++) {
-    res.push(initWizard(Math.random(), Math.random(), Math.random(), Math.random()));
+  for (var i = 0; i < count; i++) {
+    res.push(generateWizard());
   }
 
   return res;
@@ -97,11 +94,11 @@ var initWizards = function (count) {
 // -------- DOM --------
 
 var showSetup = function () {
-  setup.classList.remove('hidden');
+  setupElement.classList.remove('hidden');
 };
 
 var showSetupSimilar = function () {
-  setupSimilar.classList.remove('hidden');
+  setupSimilarElement.classList.remove('hidden');
 };
 
 var initWizardElement = function (wizard) {
@@ -116,20 +113,20 @@ var initWizardElement = function (wizard) {
 
 var initWizardsFragment = function (wizards) {
   var domFragment = document.createDocumentFragment();
-  for (var i = 0; i <= wizards.length - 1; i++) {
+  for (var i = 0; i < wizards.length; i++) {
     domFragment.appendChild(initWizardElement(wizards[i]));
   }
   return domFragment;
 };
 
-// -------- MAIN FLOW --------
+// -------- INITIALIZE --------
 
-var wizards = initWizards(WIZARD_COUNT);
+var init = function () {
+  var wizards = generateWizards(WIZARD_COUNT);
+  var wizardsFragment = initWizardsFragment(wizards);
+  setupSimilarListElement.appendChild(wizardsFragment);
+  showSetup();
+  showSetupSimilar();
+};
 
-var wizardsFragment = initWizardsFragment(wizards);
-
-setupSimilarList.appendChild(wizardsFragment);
-
-showSetup();
-
-showSetupSimilar();
+init();
